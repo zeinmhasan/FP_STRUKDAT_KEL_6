@@ -504,11 +504,11 @@ Menyimpan hasil skyline ke dalam file CSV bernama skyline_output.csv.
 using namespace std;
 
   ```
-```- iostream```: untuk input/output di terminal
-```- fstream```: untuk membaca file eksternal (CSV)
-```- sstream```: untuk parsing string menggunakan stringstream
-```- queue``` dan ```vector```: struktur data yang digunakan dalam program
-```- chrono```: untuk mengukur waktu eksekusi program
+- ```iostream```: untuk input/output di terminal
+- ```fstream```: untuk membaca file eksternal (CSV)
+- ```sstream```: untuk parsing string menggunakan stringstream
+- ```queue``` dan ```vector```: struktur data yang digunakan dalam program
+- ```chrono```: untuk mengukur waktu eksekusi program
 
 ```
 struct Baju {
@@ -547,9 +547,9 @@ queue<Baju> queueBaju;
 vector<Baju> dataBaju;
 vector<Baju> hasilSkyline;
 ```
--```dataBaju```: Menyimpan semua produk dari file CSV
--```queueBaju: antrian yang digunakan untuk memproses produk satu per satu
--```hasilSkyline```: Menyimpan hasil akhir dari produk-produk yang tidak didominasi
+- ```dataBaju```: Menyimpan semua produk dari file CSV
+- ```queueBaju```: antrian yang digunakan untuk memproses produk satu per satu
+- ```hasilSkyline```: Menyimpan hasil akhir dari produk-produk yang tidak didominasi
 
 
 ```
@@ -563,7 +563,7 @@ ifstream file("ind_1000_2_product.csv");
     getline(file, line);
 ```
 
-Membuka file CSV berisi data produk. Jika file tidak berhasil dibuka, program akan menampilkan pesan error dan berhenti
+Membuka file CSV berisi data produk. Jika file tidak berhasil dibuka, program akan menampilkan pesan error dan berhenti.
 
 
 ```
@@ -611,7 +611,7 @@ for (const auto& baju : dataBaju) {
         queueBaju.push(baju);
     }
 ```
-Semua data dari ```dataBaju``` dimasukkan ke dalam ```queueBaju``` untuk diproses satu per satu berdasarkan urutan input (FIFO)
+Semua data dari ```dataBaju``` dimasukkan ke dalam ```queueBaju``` untuk diproses satu per satu berdasarkan urutan input (FIFO).
 
 
 ```
@@ -658,7 +658,7 @@ Logika ini memastikan hasil akhir hanya berisi **produk-produk terbaik** (tidak 
 auto end = chrono::high_resolution_clock::now();
     chrono::duration<double> duration = end - start;
 ```
-Menghitung waktu yang diperlukan untuk menjalankan proses skyline query dan menampilkan durasi dalam milisecond
+Menghitung waktu yang diperlukan untuk menjalankan proses skyline query dan menampilkan durasi dalam milisecond.
 
 
 ```
@@ -687,6 +687,9 @@ Menampilkan produk yang termasuk hasil skyline:
 - Review
 dan menampilkan jumlah total produk dalam hasil skyline
 
+
+
+**Kesimpulan**
 
 Kode tersebut bertugas untuk melakukan proses Skyline Query berdasarkan struktur data queue. Setiap produk akan dibandingkan terhadap produk lain untuk menentukan apakah produk tersebut didominasi. Jika tidak didominasi produk akan ditambahkan ke dalam ```hasilSkyline```, sementara produk yang didominasi oleh produk baru akan dihapus. Hasil akhir akan berisi produk-produk terbaik berdasarkan kombinasi harga termurah dan ulasan tertinggi.
 

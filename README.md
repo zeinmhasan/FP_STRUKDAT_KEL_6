@@ -1122,7 +1122,7 @@ Struktur Data: Map (Dictionary)
 Kompleksitas Waktu: O(n log n)
   
   ### Output
-  ![Screenshot 2025-04-23 at 12 43 26](https://github.com/user-attachments/assets/744df6ca-ff9c-486e-8f0d-f46fa54f6a51)
+  ![Screenshot 2025-04-23 at 22 04 48](https://github.com/user-attachments/assets/5128c093-2ef3-40f6-a0b2-742991b99d9a)
 
 
 <h2 id=7>Kesimpulan & analisis</h2>

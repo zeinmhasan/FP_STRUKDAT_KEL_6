@@ -1,9 +1,8 @@
+#include <chrono> 
 #include <iostream>
 #include <fstream>
 #include <sstream>
 #include <vector>
-#include <chrono> // untuk timing
-
 using namespace std;
 
 struct Shirt {
@@ -78,6 +77,7 @@ vector<Shirt> readCSV(const string& filename) {
     return shirts;
 }
 
+
 int main() {
     string filename = "ind_1000_2_product.csv";
     vector<Shirt> shirts = readCSV(filename);
@@ -93,10 +93,9 @@ int main() {
         cout << "Price: " << s.price << ", Review: " << s.review << endl;
     }
 
-    auto duration = chrono::duration_cast<chrono::microseconds>(end - start);
-    cout << "\nExecution Time: " << duration.count() << " microseconds" << endl;
+    // Hitung waktu eksekusi
+    auto elapsed = chrono::duration_cast<chrono::microseconds>(end - start);
+    cout << "\nExecution Time: " << elapsed.count() << " microseconds" << endl;
 
     return 0;
 }
-
-

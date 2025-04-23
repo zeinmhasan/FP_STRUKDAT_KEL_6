@@ -464,7 +464,7 @@ int main() {
     return 0;
 }
 
-  ```
+  
   ```
   Penjelasan
   screensot
@@ -478,6 +478,8 @@ int main() {
 <h2 id= 6>Map</h2> 
 
   ```
+
+```
   #include <iostream>
 #include <fstream>
 #include <sstream>
@@ -596,6 +598,8 @@ int main() {
 
     return 0;
 }
+
+```
   ```
   ### Penjelasan
 Struktur Data: Map (Dictionary)

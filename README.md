@@ -22,9 +22,19 @@
 
 <h2 id= 1>Array</h2> 
 
-* ARRAY
-
 Mengimplementasikan algoritma Skyline Query dengan memanfaatkan struktur data vector (array dinamis), pengukuran waktu eksekusi program juga dilakukan menggunakan library chrono.
+
+## Header dan Library
+```
+#include <iostream>     // Untuk input/output standar
+#include <fstream>      // Untuk membaca file (membaca/menulis file)
+#include <sstream>      // Untuk parsing string dari file CSV
+#include <vector>       // Untuk menyimpan data dalam array dinamis 
+#include <chrono>       // Untuk pengukuran waktu eksekusi program
+using namespace std;
+```
+
+
 
   ```
   kode

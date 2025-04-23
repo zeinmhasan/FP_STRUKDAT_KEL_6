@@ -849,7 +849,7 @@ cout << "Skyline Products:\n";
 
     cout << "\nTotal produk dalam skyline: " << hasilSkyline.size() << "\n";
     cout << "Waktu eksekusi program: "
-         << chrono::duration_cast<chrono::milliseconds>(duration).count()
+         << chrono::duration_cast<chrono::microseconds>(duration).count()
          << " ms\n";
     cout << "========================================\n";
 
@@ -875,7 +875,7 @@ Kode tersebut bertugas untuk melakukan proses Skyline Query berdasarkan struktur
 **Output Program**
 
 
-![image](https://github.com/user-attachments/assets/bc2923d3-2af8-44f8-bca1-f8df8278f0da)
+![image](https://github.com/user-attachments/assets/2d07317b-5c0a-407d-9433-460f58d92ad4)
 
 <h2 id= 5>Hash Table</h2>
 

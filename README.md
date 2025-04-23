@@ -1,0 +1,1 @@
+# FP_STRUKDAT_KEL_6

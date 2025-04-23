@@ -263,6 +263,83 @@ penjelasan singkat <br>
 <li>Format output tetap konsisten: kolom dipisahkan koma (CSV).</li>
 <li>Header ditulis terlebih dahulu, lalu setiap baris data ditulis sesuai isi vector<Produk>.</li>
 
+fungi main
+
+```cpp
+int main() {
+    string namaFile = "ind_1000_2_product (1).csv";
+
+    // Mulai hitung waktu
+    auto mulai = high_resolution_clock::now();
+
+    vector<Produk> semuaProduk = bacaCSV(namaFile);
+    vector<Produk> hasilSkyline = skylineQuery(semuaProduk);
+
+    // Selesai hitung waktu
+    auto selesai = high_resolution_clock::now();
+    auto durasi = duration_cast<microseconds>(selesai - mulai);
+
+    // Tampilkan hasil
+    cout << "Produk hasil Skyline Query:\n";
+    for (const Produk& p : hasilSkyline) {
+        cout << p.id << " - " << p.label
+             << " | attr_1: " << p.attr1
+             << " | attr_2: " << p.attr2 << endl;
+    }
+
+    // Tampilkan durasi
+    cout << "\nWaktu eksekusi program: " << durasi.count() << " micro" << endl;
+    simpanHasilSkylineCSV(hasilSkyline, "skyline_output.csv");
+    return 0;
+}
+```
+
+Tujuan Fungsi main()
+Fungsi ini menjalankan keseluruhan proses:
+<br>
+1.Membaca file CSV
+<br>
+2.Melakukan skyline query
+<br>
+3.Mengukur waktu eksekusi
+<br>
+4.Menampilkan hasil
+<br>
+5.Menyimpan hasil ke file output
+
+```cpp
+string namaFile = "ind_1000_2_product (1).csv";
+auto mulai = high_resolution_clock::now();
+```
+Menyimpan nama file CSV sumber data yang akan dibaca.
+Menyimpan waktu saat program mulai menjalankan proses utama, menggunakan std::chrono untuk mengukur durasi eksekusi.
+
+```cpp
+vector<Produk> semuaProduk = bacaCSV(namaFile);
+vector<Produk> hasilSkyline = skylineQuery(semuaProduk);
+auto selesai = high_resolution_clock::now();
+auto durasi = duration_cast<microseconds>(selesai - mulai);
+```
+Membaca seluruh data produk dari file CSV dan menyimpannya dalam vektor semuaProduk.
+<br>
+Melakukan skyline query terhadap semua produk untuk mendapatkan produk-produk yang tidak didominasi.
+
+```cpp
+cout << "Produk hasil Skyline Query:\n";
+for (const Produk& p : hasilSkyline) {
+    cout << p.id << " - " << p.label
+         << " | attr_1: " << p.attr1
+         << " | attr_2: " << p.attr2 << endl;
+cout << "\nWaktu eksekusi program: " << durasi.count() << " micro" << endl;
+}
+```
+Menampilkan setiap produk hasil skyline lengkap dengan ID, label, dan dua atributnya serta waktu yang diperlukannya.
+
+```cpp
+simpanHasilSkylineCSV(hasilSkyline, "skyline_output.csv");
+```
+Menyimpan hasil skyline ke dalam file CSV bernama skyline_output.csv.
+
 
 <h2 id= 4>Queue</h2> 
 

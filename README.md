@@ -696,6 +696,8 @@ Kode tersebut bertugas untuk melakukan proses Skyline Query berdasarkan struktur
 
 
 **Output Program**
+
+
 ![image](https://github.com/user-attachments/assets/bc2923d3-2af8-44f8-bca1-f8df8278f0da)
 
 <h2 id= 5>Hash Table</h2>

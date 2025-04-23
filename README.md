@@ -1168,7 +1168,7 @@ Kompleksitas Waktu: O(n log n)
   
   ### Output
   ![Screenshot 2025-04-23 at 22 04 48](https://github.com/user-attachments/assets/5128c093-2ef3-40f6-a0b2-742991b99d9a)
+  
 
-```
 <h2 id=7>Kesimpulan & analisis</h2>
 

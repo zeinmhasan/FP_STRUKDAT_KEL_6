@@ -603,7 +603,7 @@ cout << "========================================\n";
     cout << "========================================\n";
     cout << "Total data terbaca: " << dataBaju.size() << "\n\n";
 ```
-Menampilkan jumlah produk yang berhasil dibaca dari file CSV
+Menampilkan jumlah produk yang berhasil dibaca dari file CSV.
 
 
 ```
@@ -679,7 +679,6 @@ cout << "Skyline Products:\n";
     return 0;
 }
 ```
-Penjelasan: 
 Menampilkan produk yang termasuk hasil skyline:
 - ID
 - Nama produk

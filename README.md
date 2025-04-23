@@ -493,8 +493,8 @@ Menyimpan hasil skyline ke dalam file CSV bernama skyline_output.csv.
 
 <h2 id= 4>Queue</h2> 
 
-  ```
-  #include <iostream>
+```
+#include <iostream>
 #include <fstream>
 #include <sstream>
 #include <queue>
@@ -503,36 +503,71 @@ Menyimpan hasil skyline ke dalam file CSV bernama skyline_output.csv.
 #include <chrono>
 using namespace std;
 
+  ```
+```- iostream```: untuk input/output di terminal
+```- fstream```: untuk membaca file eksternal (CSV)
+```- sstream```: untuk parsing string menggunakan stringstream
+```- queue``` dan ```vector```: struktur data yang digunakan dalam program
+```- chrono```: untuk mengukur waktu eksekusi program
+
+```
 struct Baju {
     int id;
     string namaProduk;
     int harga;
     int ulasan;
 };
+```
+Struct ini merepresentasikan satu entitas produk baju yang memiliki:
 
-// Fungsi untuk menentukan apakah A mendominasi B
+- ```id```: ID unik dari produk
+- ```namaProduk```: Nama atau label produk
+- ```harga```: Harga produk (semakin kecil semakin baik)
+- ```ulasan```: Skor ulasan atau review (semakin besar semakin baik)
+
+
+```
 bool mendominasi(const Baju& a, const Baju& b) {
     return (a.harga <= b.harga && a.ulasan >= b.ulasan) &&
-    (a.harga < b.harga || a.ulasan > b.ulasan);
-}           
+           (a.harga < b.harga || a.ulasan > b.ulasan);
+}
+```
 
+Fungsi ini digunakan untuk menentukan apakah produk ```a``` mendominasi produk ```b```:
+
+Produk ```a``` mendominasi ```b``` jika:
+- ```a``` memiliki harga lebih murah atau sama (<=)
+- dan memiliki ulasan lebih tinggi atau sama (>=)
+- serta memiliki keunggulan di salah satu aspek minimal (< atau >)
+
+
+```
 int main() {
-    queue<Baju> queueBaju;
-    vector<Baju> dataBaju;
-    vector<Baju> hasilSkyline;
+queue<Baju> queueBaju;
+vector<Baju> dataBaju;
+vector<Baju> hasilSkyline;
+```
+-```dataBaju```: Menyimpan semua produk dari file CSV
+-```queueBaju: antrian yang digunakan untuk memproses produk satu per satu
+-```hasilSkyline```: Menyimpan hasil akhir dari produk-produk yang tidak didominasi
 
-    // Membaca file CSV
-    ifstream file("ind_1000_2_product.csv");
+
+```
+ifstream file("ind_1000_2_product.csv");
     if (!file.is_open()) {
         cout << "Gagal membuka file CSV!" << endl;
         system("pause");
         return 1;
     }
-
     string line;
-    getline(file, line); // Lewati header
+    getline(file, line);
+```
 
-    while (getline(file, line)) {
+Membuka file CSV berisi data produk. Jika file tidak berhasil dibuka, program akan menampilkan pesan error dan berhenti
+
+
+```
+while (getline(file, line)) {
         stringstream ss(line);
         string idStr, namaStr, hargaStr, ulasanStr;
         getline(ss, idStr, ',');
@@ -554,20 +589,39 @@ int main() {
             continue;
         }
     }
+```
+Program membaca setiap baris file:
+- Mengambil 4 nilai: ID, nama produk, harga, dan ulasan
+- Mengonversi string menjadi integer
+- Menyimpan data ke dalam ```dataBaju```
+Baris kosong atau data invalid (misalnya harga kosong) akan diabaikan
 
-    cout << "========================================\n";
+
+```
+cout << "========================================\n";
     cout << "         SKYLINE PRODUCTS (QUEUE)       \n";
     cout << "========================================\n";
     cout << "Total data terbaca: " << dataBaju.size() << "\n\n";
+```
+Menampilkan jumlah produk yang berhasil dibaca dari file CSV
 
-    for (const auto& baju : dataBaju) {
+
+```
+for (const auto& baju : dataBaju) {
         queueBaju.push(baju);
     }
+```
+Semua data dari ```dataBaju``` dimasukkan ke dalam ```queueBaju``` untuk diproses satu per satu berdasarkan urutan input (FIFO)
 
-    // Mulai ukur waktu
-    auto start = chrono::high_resolution_clock::now();
 
-    while (!queueBaju.empty()) {
+```
+auto start = chrono::high_resolution_clock::now();
+```
+Mengambil waktu sebelum proses skyline dimulai
+
+
+```
+while (!queueBaju.empty()) {
         Baju current = queueBaju.front();
         queueBaju.pop();
         bool didominasi = false;
@@ -590,14 +644,25 @@ int main() {
             temp.push_back(current);
             hasilSkyline = temp;
         }        
-        
     }
+```
+Untuk setiap produk dalam antrian:
+- Produk diambil dari depan queue
+- Diperiksa apakah didominasi oleh produk dalam hasilSkyline
+Jika tidak didominasi:
+- Produk ditambahkan ke ```hasilSkyline```
+- Produk lama yang didominasi oleh current akan dihapus
+Logika ini memastikan hasil akhir hanya berisi **produk-produk terbaik** (tidak didominasi)
 
-    auto end = chrono::high_resolution_clock::now();
+```
+auto end = chrono::high_resolution_clock::now();
     chrono::duration<double> duration = end - start;
+```
+Menghitung waktu yang diperlukan untuk menjalankan proses skyline query dan menampilkan durasi dalam milisecond
 
-    // Output hasil akhir
-    cout << "Skyline Products:\n";
+
+```
+cout << "Skyline Products:\n";
     for (const auto& b : hasilSkyline) {
         cout << "ID: " << b.id
              << ", Name: " << b.namaProduk
@@ -613,11 +678,20 @@ int main() {
 
     return 0;
 }
+```
+Penjelasan: 
+Menampilkan produk yang termasuk hasil skyline:
+- ID
+- Nama produk
+- Harga
+- Review
+dan menampilkan jumlah total produk dalam hasil skyline
 
-  
-  ```
-  Penjelasan
-  screensot
+
+Kode tersebut bertugas untuk melakukan proses Skyline Query berdasarkan struktur data queue. Setiap produk akan dibandingkan terhadap produk lain untuk menentukan apakah produk tersebut didominasi. Jika tidak didominasi produk akan ditambahkan ke dalam ```hasilSkyline```, sementara produk yang didominasi oleh produk baru akan dihapus. Hasil akhir akan berisi produk-produk terbaik berdasarkan kombinasi harga termurah dan ulasan tertinggi.
+
+
+**Output Program**
 <h2 id= 5>Hash Table</h2>
 
 ```

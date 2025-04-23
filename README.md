@@ -666,8 +666,7 @@ simpanHasilSkylineCSV(hasilSkyline, "skyline_output.csv");
 ```
 Menyimpan hasil skyline ke dalam file CSV bernama skyline_output.csv.
 
-![Uploading image.png…]()
-
+![Image](https://github.com/user-attachments/assets/59215a23-c809-493a-90bf-464114250e34)
 
 
 <h2 id= 4>Queue</h2> 

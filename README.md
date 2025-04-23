@@ -17,6 +17,7 @@
     <li><a href="#4">Queue</a></li>
     <li><a href="#5">Hash table</a></li>
     <li><a href="#6">Map</a></li>
+    <li><a href="#7">Kesimpulan</a></li>
   </ul>
 </nav>
 
@@ -864,10 +865,6 @@ Kompleksitas Waktu: O(n log n)
   ### Output
   ![Screenshot 2025-04-23 at 12 43 26](https://github.com/user-attachments/assets/744df6ca-ff9c-486e-8f0d-f46fa54f6a51)
 
-## Analisis
-  ```
-  pake code dijadiin satu ga? terus nanti outputnya kek pake struktur data ini brp ms
-  ```
 
-  atau cuman penjelasan dan kesimpulan sama ssan
+<h2 id=7>Kesimpulan & analisis</h2>
 

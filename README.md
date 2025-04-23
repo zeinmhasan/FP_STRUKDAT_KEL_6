@@ -12,7 +12,7 @@
 
 ## Array
 ## Linked List
-##Stack
+## Stack
 ## Queue
 ## Hash Table
 ## Map

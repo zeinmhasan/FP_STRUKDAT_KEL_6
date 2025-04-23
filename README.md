@@ -177,11 +177,188 @@ Metode ini cocok untuk menangani dataset seperti CSV karena memungkinkan penyimp
 
 <h2 id= 2>Linked List</h2>
 
-  ```
-  kode
-  ```
-  Penjelasan
-  screensot
+### Library
+```cpp
+#include <iostream>
+#include <fstream>
+#include <sstream>
+#include <string>
+#include <chrono>
+```
+- `iostream`: untuk input dan output (seperti cout).
+- `fstream` : untuk membaca file CSV.
+- `sstream`: untuk memproses string baris-per-baris dari file CSV.
+- `string`: menggunakan objek string.
+- `chrono`: untuk menghitung waktu eksekusi program.
+
+### Struct 
+```cpp
+struct Item {
+    string id;
+    string category;
+    double price;
+    double reviewScore;
+    Item* next;
+};
+```
+- `id`: ID produk.
+- `category` : kategori produk.
+- `price`: harga produk.
+- `reviewScore`: nilai ulasan produk.
+- `next`: pointer ke item berikutnya (membentuk linked list).
+
+### Class Linked List
+```cpp
+class LinkedList {
+private:
+    Item* head;
+    int totalDataCount = 0;
+
+public:
+    LinkedList() : head(nullptr) {}
+```
+- `head` : pointer ke elemen pertama.
+- `totalDataCount` : jumlah total data yang dimuat.
+- `insert(), dominates(), skylineQuery(), dan loadFromCSV()` sebagai fungsi anggota.
+
+### Insert 
+```cpp
+void insert(string id, string category, double price, double reviewScore) {
+        Item* newItem = new Item{id, category, price, reviewScore, nullptr};
+        if (!head) {
+            head = newItem;
+        } else {
+            Item* temp = head;
+            while (temp->next) temp = temp->next;
+            temp->next = newItem;
+        }
+        totalDataCount++;
+    }
+```
+- Insert Berfungsi untuk  menambahkan produk baru ke akhir linked list.
+
+### Dominates
+ ```cpp
+ bool dominates(Item* a, Item* b) {
+        return (a->price <= b->price && a->reviewScore >= b->reviewScore) &&
+               (a->price < b->price || a->reviewScore > b->reviewScore);
+    }
+```
+- Dominates Berfungsi untuk menentukan apakah produk a mendominasi produk b. Dominasi terjadi jika:
+a.price ≤ b.price dan
+a.reviewScore ≥ b.reviewScore
+Dengan syarat ada minimal satu atribut yang lebih baik (lebih kecil harga atau lebih tinggi review).
+
+### SkylineQuery
+ ```cpp 
+ void skylineQuery() {
+      LinkedList skyline;
+  
+      for (Item* curr = head; curr != nullptr; curr = curr->next) {
+          bool isDominated = false;
+          Item* temp = skyline.head;
+          Item* prev = nullptr;
+  
+          while (temp != nullptr) {
+              if (dominates(temp, curr)) {
+                  isDominated = true;
+                  break;
+              } else if (dominates(curr, temp)) {
+                  if (prev == nullptr) {
+                      skyline.head = temp->next;
+                  } else {
+                      prev->next = temp->next;
+                  }
+                  Item* toDelete = temp;
+                  temp = temp->next;
+                  delete toDelete;
+                  continue;
+              }
+              prev = temp;
+              temp = temp->next;
+          }
+  
+          if (!isDominated) {
+              skyline.insert(curr->id, curr->category, curr->price, curr->reviewScore);
+          }
+      }
+  
+      cout << "Skyline Items (Best Clothes):\n";
+      int skylineCount = 0;
+      for (Item* temp = skyline.head; temp != nullptr; temp = temp->next) {
+          string idNum = temp->id;  
+          cout << idNum << " | product-" << idNum
+               << " | Price: " << static_cast<int>(temp->price)
+               << " | Review Score: " << static_cast<int>(temp->reviewScore) << "\n";
+          skylineCount++;
+      }
+  
+      cout << "\nJumlah produk dalam skyline: " << skylineCount << endl;
+      cout << "Jumlah produk dalam data: " << totalDataCount << endl;
+  }
+```
+- SkylineQuery berfungsi untuk melakukan iterasi pada seluruh data dan mencari produk yang tidak didominasi oleh produk lain, kemudian mencetak hasil produk-produk tersebut (Skyline).
+- Inisialisasi linked list baru `skyline` .
+- Iterasi setiap item dari linked list utama:
+- Cek apakah produk tersebut didominasi oleh item dalam `skyline`.
+- Jika produk sekarang mendominasi produk dalam skyline, hapus produk lama dari skyline.
+- Jika produk sekarang tidak didominasi, masukkan ke skyline.
+- Tampilkan hasil dan jumlah produk skyline vs total data.
+
+### LoadFromCSV
+```cpp
+    void loadFromCSV(const string& filename) {
+        ifstream file(filename);
+        string line;
+        getline(file, line); // skip header
+
+        while (getline(file, line)) {
+            stringstream ss(line);
+            string id, category, priceStr, reviewStr;
+            getline(ss, id, ',');
+            getline(ss, category, ',');
+            getline(ss, priceStr, ',');
+            getline(ss, reviewStr, ',');
+
+            double price = stod(priceStr);
+            double reviewScore = stod(reviewStr);
+
+            insert(id, category, price, reviewScore);
+        }
+    }
+};
+```
+- LoadFromCSV berfungsi untuk ,embaca file CSV dan mengisi linked list dengan data dari file.
+- Lewati header.
+- Ambil setiap baris, pisahkan berdasarkan koma.
+- Ubah `price` dan `reviewScore` menjadi double.
+- Panggil fungsi `insert()` untuk menambah data.
+
+### Main
+```cpp 
+int main() {
+    LinkedList clothes;
+
+    auto start = high_resolution_clock::now();
+
+    clothes.loadFromCSV("ind_1000_2_product.csv");
+    clothes.skylineQuery();
+
+    auto stop = high_resolution_clock::now();
+    auto duration = duration_cast<milliseconds>(stop - start);
+    cout << "\nWaktu komputasi: " << duration.count() << " ms" << endl;
+
+    return 0;
+}
+```
+- Membuat instance `LinkedList` .
+- Mulai pencatatan waktu.
+- Muat data dari file `ind_1000_2_product.csv`.
+- Jalankan Skyline Query.
+- Cetak waktu komputasi yang dibutuhkan.
+
+### Output 
+![image](https://github.com/user-attachments/assets/f4f0d124-3c6c-4f94-bb02-fa0523ba5e1d)
 <h2 id= 3>Stack</h2>
 
 untuk mengimplementasikan skyline query dengan struktur data stack kita memerlukan library ini

@@ -151,8 +151,8 @@ int main() {
         cout << "Price: " << s.price << ", Review: " << s.review << endl;
     }
 
-    auto duration = chrono::duration_cast<chrono::microseconds>(end - start);
-    cout << "\nExecution Time: " << duration.count() << " microseconds" << endl;
+    auto elapsed = chrono::duration_cast<chrono::microseconds>(end - start);
+    cout << "\nExecution Time: " << elapsed.count() << " microseconds" << endl;
 
     return 0;
 }

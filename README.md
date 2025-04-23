@@ -22,6 +22,10 @@
 
 <h2 id= 1>Array</h2> 
 
+* ARRAY
+
+Mengimplementasikan algoritma Skyline Query dengan memanfaatkan struktur data vector (array dinamis), pengukuran waktu eksekusi program juga dilakukan menggunakan library chrono.
+
   ```
   kode
   ```

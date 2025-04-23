@@ -1170,3 +1170,81 @@ Implementasi Skyline Query ini menggunakan std::map untuk menyaring produk yang 
 
 <h2 id=7>Kesimpulan & analisis</h2>
 
+Implementasi Skyline Query menunjukkan bahwa efisiensi waktu sangat dipengaruhi oleh jenis struktur data yang digunakan. Dari hasil pengujian:
+<li>
+Linked List memiliki waktu eksekusi paling lama (13995 mikrodetik), menunjukkan bahwa struktur ini kurang efisien karena pencarian dan penghapusan elemen dominasi memerlukan traversal linear.
+</li>
+<li>
+Stack (3442 mikrodetik) dan Queue (375 mikrodetik) menawarkan peningkatan performa, dengan Queue secara signifikan lebih cepat dari Stack karena pengelolaan data yang lebih teratur dalam konteks antrian.
+</li>
+<li>
+Hash Table (188 mikrodetik) memberikan kinerja terbaik karena akses data yang sangat cepat berkat hashing, memungkinkan pencarian dan penghapusan elemen dengan kompleksitas mendekati O(1).
+</li>
+<li>
+Array (131 mikrodetik) mencatat waktu tercepat, ideal untuk data statis.  Hal ini disebabkan oleh akses elemen yang langsung melalui indeks, yang sangat efisien dan optimal, terutama ketika data sudah terorganisir dalam ukuran tetap dan tidak perlu dilakukan penyisipan atau penghapusan elemen secara dinamis.
+</li>
+<li>
+Map (1051 mikrodetik), meskipun lebih lambat dari Hash Table, tetap lebih efisien dibandingkan struktur linear karena menggunakan pohon biner untuk pencarian dan penyisipan dengan kompleksitas O(log n).
+</li>
+Secara keseluruhan, Array adalah pilihan paling optimal untuk implementasi Skyline Query dalam konteks efisiensi waktu, diikuti oleh Hash table dan queue.
+
+<h3>Ringkasan dalam bentuk tabel</h3>
+<table>
+  <thead>
+    <tr>
+      <th>Struktur Data</th>
+      <th>Waktu Eksekusi</th>
+      <th>Kelebihan</th>
+      <th>Kekurangan</th>
+      <th>Rekomendasi Penggunaan</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Array</td>
+      <td>131 µs</td>
+      <td>Akses indeks sangat cepat, cache-friendly</td>
+      <td>Kurang fleksibel untuk penyisipan/penghapusan dinamis</td>
+      <td>Pilihan terbaik jika ukuran data tetap dan pemrosesan bisa dilakukan dengan iterasi langsung. Cocok untuk pendekatan brute-force yang dioptimasi.</td>
+    </tr>
+    <tr>
+      <td>Hash Table</td>
+      <td>188 µs</td>
+      <td>Akses sangat cepat (O(1) rata-rata), efisien untuk pencarian</td>
+      <td>Tidak terurut, bisa terjadi tabrakan hash</td>
+      <td>Sangat direkomendasikan untuk data besar tanpa kebutuhan urutan eksplisit.</td>
+    </tr>
+    <tr>
+      <td>Queue</td>
+      <td>375 µs</td>
+      <td>FIFO, cocok untuk alur pemrosesan sekuensial</td>
+      <td>Terbatas untuk operasi di ujung antrian</td>
+      <td>Cocok untuk pemrosesan batch data yang masuk secara berurutan.</td>
+    </tr>
+    <tr>
+      <td>Map (e.g. std::map)</td>
+      <td>1051 µs</td>
+      <td>Data terurut otomatis, pencarian logaritmik</td>
+      <td>Lebih lambat dari hash table</td>
+      <td>Ideal saat hasil perlu disimpan terurut atau pencarian rentang nilai.</td>
+    </tr>
+    <tr>
+      <td>Stack</td>
+      <td>3442 µs</td>
+      <td>LIFO, cocok untuk pemrosesan mundur atau rekursif</td>
+      <td>Tidak fleksibel untuk dominasi multipoint</td>
+      <td>Dipakai bila algoritma berbasis backtracking.</td>
+    </tr>
+    <tr>
+      <td>Linked List</td>
+      <td>13995 µs</td>
+      <td>Sederhana, mudah dipahami</td>
+      <td>Akses lambat, traversal linier</td>
+      <td>Hanya cocok untuk pembelajaran atau data kecil. Tidak disarankan untuk performa tinggi.</td>
+    </tr>
+  </tbody>
+</table>
+
+
+
+

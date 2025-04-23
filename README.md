@@ -24,7 +24,7 @@
 
 Mengimplementasikan algoritma Skyline Query dengan memanfaatkan struktur data vector (array dinamis), pengukuran waktu eksekusi program juga dilakukan menggunakan library chrono.
 
-#### 1.Header dan Library
+#### 1. Header dan Library
 ```
 #include <iostream>     // Untuk input/output standar
 #include <fstream>      // Untuk membaca file (membaca/menulis file)
@@ -33,14 +33,147 @@ Mengimplementasikan algoritma Skyline Query dengan memanfaatkan struktur data ve
 #include <chrono>       // Untuk pengukuran waktu eksekusi program
 using namespace std;
 ```
+#### 2. Struktur Data Produk
+```
+struct Shirt {
+    int price;
+    float review;
+};
+```
+Struct Shirt menyimpan dua atribut utama yaitu:
+- price: harga dari produk
+- review: nilai ulasan dari produk
 
+#### 3. Fungsi Dominasi
+```
+bool dominates(Shirt a, Shirt b) {
+    return (a.price <= b.price && a.review >= b.review) &&
+           (a.price < b.price || a.review > b.review);
+}
+```
+Fungsi dominates mengecek apakah produk a mendominasi produk b.
+Syarat dominasi terpenuhi jika:
+- Harga a lebih murah atau sama dengan harga b, dan
+- Review a lebih tinggi atau sama dengan review b,
+- Dengan salah satu atribut harus lebih unggul secara ketat.
 
+#### 4. Fungsi Skyline Query
+```
+vector<Shirt> skylineQuery(const vector<Shirt>& shirts) {
+    vector<Shirt> skyline;
+    for (const auto& s : shirts) {
+        bool isDominated = false;
+        for (const auto& sk : skyline) {
+            if (dominates(sk, s)) {
+                isDominated = true;
+                break;
+            }
+        }
+        if (!isDominated) {
+            vector<Shirt> newSkyline;
+            for (const auto& sk : skyline) {
+                if (!dominates(s, sk)) {
+                    newSkyline.push_back(sk);
+                }
+            }
+            newSkyline.push_back(s);
+            skyline = newSkyline;
+        }
+    }
+    return skyline;
+}
+```
+Fungsi skylineQuery akan mencari item yang tidak didominasi oleh item lain.
 
-  ```
-  kode
-  ```
-  Penjelasan
-  screensot
+- Setiap item dicek apakah didominasi oleh item yang sudah ada di skyline.
+- Jika tidak didominasi, maka item tersebut:
+  1. Akan dimasukkan ke hasil skyline
+  2. Akan menggantikan item lain yang didominasi olehnya
+ 
+#### 5. Fungsi Membaca File CSV
+```
+vector<Shirt> readCSV(const string& filename) {
+    vector<Shirt> shirts;
+    ifstream file(filename);
+    string line;
+
+    if (!file.is_open()) {
+        cerr << "Gagal membuka file: " << filename << endl;
+        return shirts;
+    }
+
+    getline(file, line); // Lewati baris header pertama
+
+    while (getline(file, line)) {
+        stringstream ss(line);
+        string idStr, nameStr, attr1Str, attr2Str;
+
+        getline(ss, idStr, ',');
+        getline(ss, nameStr, ',');
+        getline(ss, attr1Str, ',');
+        getline(ss, attr2Str, ',');
+
+        if (attr1Str.empty() || attr2Str.empty()) continue;
+
+        try {
+            int attr1 = stoi(attr1Str);
+            float attr2 = stof(attr2Str);
+            shirts.push_back({attr1, attr2});
+        } catch (const invalid_argument& e) {
+            cerr << "Baris tidak valid, dilewati: " << line << endl;
+            continue;
+        }
+    }
+
+    return shirts;
+}
+```
+Fungsi readCSV membaca data dari file CSV dengan memanfaatkan ifstream dan stringstream.
+- Baris pertama dilewati karena merupakan header.
+- Setiap baris dipecah berdasarkan koma dan dikonversi menjadi atribut price dan review.
+- Data dimasukkan ke dalam array dinamis vector<Shirt> jika valid.
+
+#### 6. Fungsi Utama (main)
+```
+int main() {
+    string filename = "ind_1000_2_product.csv";
+    vector<Shirt> shirts = readCSV(filename);
+
+    auto start = chrono::high_resolution_clock::now();
+    vector<Shirt> skyline = skylineQuery(shirts);
+    auto end = chrono::high_resolution_clock::now();
+
+    cout << "Total Items: " << shirts.size() << endl;
+    cout << "Skyline Results (Best Shirts): " << skyline.size() << endl;
+
+    for (const auto& s : skyline) {
+        cout << "Price: " << s.price << ", Review: " << s.review << endl;
+    }
+
+    auto duration = chrono::duration_cast<chrono::microseconds>(end - start);
+    cout << "\nExecution Time: " << duration.count() << " microseconds" << endl;
+
+    return 0;
+}
+```
+Fungsi main berfungsi sebagai pengontrol alur utama program:
+- Memanggil fungsi readCSV untuk membaca data dari file
+- Menjalankan skylineQuery untuk memperoleh produk terbaik
+- Mengukur dan mencetak waktu eksekusi menggunakan chrono
+- Menampilkan hasil dan ukuran skyline ke layar
+
+#### 7. Penjelasan Metode Array
+Dalam program ini digunakan struktur data vector dari C++ STL (Standard Template Library) sebagai implementasi array dinamis. vector berfungsi seperti array biasa namun dengan ukuran yang dapat berubah-ubah selama runtime.
+
+Kelebihan penggunaan vector:
+- Mudah dalam menambahkan dan menghapus elemen
+- Mendukung operasi iterasi dan akses indeks seperti array biasa
+- Secara otomatis mengatur memori saat data bertambah banyak
+
+Metode ini cocok untuk menangani dataset seperti CSV karena memungkinkan penyimpanan data dalam jumlah besar secara fleksibel dan efisien.
+
+ 
+
 <h2 id= 2>Linked List</h2>
 
   ```

@@ -161,7 +161,7 @@ int main() {
     return 0;
 }
   ```
-  ###Penjelasan
+  ### Penjelasan
 Struktur Data: Map (Dictionary)
 Kompleksitas Waktu: O(n log n)
   

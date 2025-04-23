@@ -67,7 +67,6 @@ int main() {
         queueBaju.push(baju);
     }
 
-    // Mulai ukur waktu
     auto start = chrono::high_resolution_clock::now();
 
     while (!queueBaju.empty()) {
@@ -99,7 +98,6 @@ int main() {
     auto end = chrono::high_resolution_clock::now();
     chrono::duration<double> duration = end - start;
 
-    // Output hasil akhir
     cout << "Skyline Products:\n";
     for (const auto& b : hasilSkyline) {
         cout << "ID: " << b.id
@@ -110,7 +108,7 @@ int main() {
 
     cout << "\nTotal produk dalam skyline: " << hasilSkyline.size() << "\n";
     cout << "Waktu eksekusi program: "
-         << chrono::duration_cast<chrono::milliseconds>(duration).count()
+         << chrono::duration_cast<chrono::microseconds>(duration).count()
          << " ms\n";
     cout << "========================================\n";
 

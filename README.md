@@ -19,20 +19,23 @@
     <li><a href="#6">Map</a></li>
   </ul>
 </nav>
-## Hasil 
+
 <h2 id= 1>Array</h2> 
+
   ```
   kode
   ```
   Penjelasan
   screensot
 <h2 id= 2>Linked List</h2>
+
   ```
   kode
   ```
   Penjelasan
   screensot
 <h2 id= 3>Stack</h2>
+
 untuk mengimplementasikan skyline query dengan struktur data stack kita memerlukan library ini
   ```cpp
 #include <iostream>   // Untuk input dan output standar seperti std::cout dan std::cin
@@ -262,18 +265,21 @@ penjelasan singkat <br>
 
 
 <h2 id= 4>Queue</h2> 
+
   ```
   kode
   ```
   Penjelasan
   screensot
 <h2 id= 5>Hash Table</h2>
+
   ```
   kode
   ```
   Penjelasan
   screensot
 <h2 id= 6>Map</h2> 
+
   ```
   #include <iostream>
 #include <fstream>

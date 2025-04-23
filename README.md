@@ -346,7 +346,7 @@ int main() {
 
     auto stop = high_resolution_clock::now();
     auto duration = duration_cast<milliseconds>(stop - start);
-    cout << "\nWaktu komputasi: " << duration.count() << " ms" << endl;
+    cout << "\nWaktu komputasi: " << duration.count() << " us" << endl;
 
     return 0;
 }
@@ -358,7 +358,8 @@ int main() {
 - Cetak waktu komputasi yang dibutuhkan.
 
 ### Output 
-![image](https://github.com/user-attachments/assets/f4f0d124-3c6c-4f94-bb02-fa0523ba5e1d)
+![image](https://github.com/user-attachments/assets/c76225e9-cf81-4b58-8cdf-c61386b71268)
+
 <h2 id= 3>Stack</h2>
 
 untuk mengimplementasikan skyline query dengan struktur data stack kita memerlukan library ini
@@ -665,7 +666,8 @@ simpanHasilSkylineCSV(hasilSkyline, "skyline_output.csv");
 ```
 Menyimpan hasil skyline ke dalam file CSV bernama skyline_output.csv.
 
-![Image](https://github.com/user-attachments/assets/59215a23-c809-493a-90bf-464114250e34)
+![Uploading image.png…]()
+
 
 
 <h2 id= 4>Queue</h2> 

@@ -24,7 +24,7 @@
 
 Mengimplementasikan algoritma Skyline Query dengan memanfaatkan struktur data vector (array dinamis), pengukuran waktu eksekusi program juga dilakukan menggunakan library chrono.
 
-## Header dan Library
+### Header dan Library
 ```
 #include <iostream>     // Untuk input/output standar
 #include <fstream>      // Untuk membaca file (membaca/menulis file)

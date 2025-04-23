@@ -684,7 +684,9 @@ Menampilkan produk yang termasuk hasil skyline:
 - Nama produk
 - Harga
 - Review
-dan menampilkan jumlah total produk dalam hasil skyline
+
+
+kemudian menampilkan jumlah total produk dalam hasil skyline.
 
 
 

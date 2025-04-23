@@ -9,11 +9,47 @@
 | Muhammad Fatihul Qolbi Ash Shiddiqi | 5027241023 | LINKED LIST |
 | Danar Bagus Rasendriya | 5027231055 | MAP |
 
-
-## Array
-## Linked List
-## Stack
-## Queue
-## Hash Table
-## Map
+## Hasil 
+#### Array
+  ```
+  kode
+  ```
+  Penjelasan
+  screensot
+#### Linked List
+  ```
+  kode
+  ```
+  Penjelasan
+  screensot
+#### Stack
+  ```
+  kode
+  ```
+  Penjelasan
+  screensot
+#### Queue
+  ```
+  kode
+  ```
+  Penjelasan
+  screensot
+#### Hash Table
+  ```
+  kode
+  ```
+  Penjelasan
+  screensot
+#### Map
+  ```
+  kode
+  ```
+  Penjelasan
+  screensot
 ## Analisis
+  ```
+  pake code dijadiin satu ga? terus nanti outputnya kek pake struktur data ini brp ms
+  ```
+
+  atau cuman penjelasan dan kesimpulan sama ssan
+

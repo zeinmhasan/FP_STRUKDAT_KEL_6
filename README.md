@@ -9,20 +9,30 @@
 | Muhammad Fatihul Qolbi Ash Shiddiqi | 5027241023 | LINKED LIST |
 | Danar Bagus Rasendriya | 5027231055 | MAP |
 
+<nav>
+  <ul>
+    <li><a href="#1">Array</a></li>
+    <li><a href="#2">Linked list</a></li>
+    <li><a href="#3">Stack</a></li>
+    <li><a href="#4">Queue</a></li>
+    <li><a href="#5">Hash table</a></li>
+    <li><a href="#6">Map</a></li>
+  </ul>
+</nav>
 ## Hasil 
-#### Array
+<h2 id= 1>Array</h2> 
   ```
   kode
   ```
   Penjelasan
   screensot
-#### Linked List
+<h2 id= 2>Linked List</h2>
   ```
   kode
   ```
   Penjelasan
   screensot
-#### Stack
+<h2 id= 3>Stack</h2>
 untuk mengimplementasikan skyline query dengan struktur data stack kita memerlukan library ini
   ```cpp
 #include <iostream>   // Untuk input dan output standar seperti std::cout dan std::cin
@@ -251,19 +261,19 @@ penjelasan singkat <br>
 <li>Header ditulis terlebih dahulu, lalu setiap baris data ditulis sesuai isi vector<Produk>.</li>
 
 
-#### Queue
+<h2 id= 4>Queue</h2> 
   ```
   kode
   ```
   Penjelasan
   screensot
-#### Hash Table
+<h2 id= 5>Hash Table</h2>
   ```
   kode
   ```
   Penjelasan
   screensot
-#### Map
+<h2 id= 6>Map</h2> 
   ```
   #include <iostream>
 #include <fstream>

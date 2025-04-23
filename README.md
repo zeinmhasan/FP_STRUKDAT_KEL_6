@@ -1002,7 +1002,7 @@ int main() {
 <h2 id= 6>Map</h2> 
 
 ```
-  #include <iostream>
+#include <iostream>
 #include <fstream>
 #include <sstream>
 #include <vector>
@@ -1015,6 +1015,13 @@ int main() {
 using namespace std;
 using namespace std::chrono;
 
+/**
+ * Struct untuk merepresentasikan produk dengan:
+ * - id: identifier unik
+ * - label: nama produk
+ * - attr1: atribut pertama (misal: harga)
+ * - attr2: atribut kedua (misal: rating)
+ */
 struct Product {
     int id;
     string label;
@@ -1022,32 +1029,45 @@ struct Product {
     int attr2;
 };
 
+/**
+ * Membaca data dari file CSV dan mengkonversinya ke vector<Product>
+ * @param filename Nama file CSV
+ * @return Vector berisi semua produk yang berhasil dibaca
+ */
 vector<Product> readCSV(const string& filename) {
     vector<Product> data;
     ifstream file(filename);
 
+    // Error handling jika file tidak bisa dibuka
     if (!file.is_open()) {
         cerr << "❌ File tidak ditemukan: " << filename << endl;
         return data;
     }
 
     string line;
-    getline(file, line); // skip header
+    getline(file, line); // skip header (baris pertama)
 
+    // Membaca setiap baris data
     while (getline(file, line)) {
         stringstream ss(line);
         string id_str, label, attr1_str, attr2_str;
+        
+        // Parsing setiap kolom
         getline(ss, id_str, ',');
         getline(ss, label, ',');
         getline(ss, attr1_str, ',');
         getline(ss, attr2_str, ',');
 
         try {
+            // Konversi string ke integer
             int id = stoi(id_str);
             int attr1 = stoi(attr1_str);
             int attr2 = stoi(attr2_str);
+            
+            // Tambahkan ke vector data
             data.push_back({id, label, attr1, attr2});
         } catch (...) {
+            // Skip baris jika terjadi error konversi
             continue;
         }
     }
@@ -1055,18 +1075,27 @@ vector<Product> readCSV(const string& filename) {
     return data;
 }
 
+/**
+ * Algoritma Skyline menggunakan struktur data map
+ * @param products Vector produk input
+ * @return Vector produk yang merupakan skyline
+ */
 vector<Product> skylineUsingMap(const vector<Product>& products) {
-    // urutkan berdasarkan attr1 (harga)
+    // 1. Urutkan produk berdasarkan attr1 (ascending)
     vector<Product> sorted = products;
     sort(sorted.begin(), sorted.end(), [](const Product& a, const Product& b) {
         return a.attr1 < b.attr1;
     });
 
-    // map<attr1, attr2>
+    // 2. Inisialisasi map untuk menyimpan skyline
+    // Key: attr1 (harga), Value: Product
     map<int, Product> skyline;
 
+    // 3. Proses setiap produk secara berurutan
     for (const auto& p : sorted) {
         bool dominated = false;
+        
+        // 3a. Cek apakah produk didominasi oleh skyline yang ada
         for (const auto& [_, q] : skyline) {
             if (q.attr1 <= p.attr1 && q.attr2 >= p.attr2) {
                 dominated = true;
@@ -1074,14 +1103,15 @@ vector<Product> skylineUsingMap(const vector<Product>& products) {
             }
         }
 
+        // 3b. Jika tidak didominasi, tambahkan ke skyline
         if (!dominated) {
             skyline[p.attr1] = p;
 
-            // Hapus produk yang sekarang didominasi oleh p
+            // 3c. Hapus produk di skyline yang didominasi oleh produk baru ini
             auto it = skyline.upper_bound(p.attr1);
             while (it != skyline.end()) {
                 if (it->second.attr2 <= p.attr2) {
-                    it = skyline.erase(it);
+                    it = skyline.erase(it); // Hapus yang didominasi
                 } else {
                     ++it;
                 }
@@ -1089,7 +1119,7 @@ vector<Product> skylineUsingMap(const vector<Product>& products) {
         }
     }
 
-    // ubah ke vector hasil
+    // 4. Konversi map ke vector untuk return value
     vector<Product> result;
     for (const auto& [_, p] : skyline) {
         result.push_back(p);
@@ -1099,28 +1129,38 @@ vector<Product> skylineUsingMap(const vector<Product>& products) {
 }
 
 int main() {
+    // Konfigurasi file input
     string filename = "ind_1000_2_product.csv";
+    
+    // Baca data dari file
     vector<Product> data = readCSV(filename);
     cout << "Jumlah produk dalam data: " << data.size() << endl;
 
+    // Eksekusi skyline query + ukur waktu
     auto start = high_resolution_clock::now();
     vector<Product> skyline = skylineUsingMap(data);
     auto end = high_resolution_clock::now();
+    
+    // Hitung durasi
     auto durationMs = duration_cast<milliseconds>(end - start);
     auto durationUs = duration_cast<microseconds>(end - start);
 
+    // Tampilkan hasil
     cout << "\nHasil Skyline:\n";
     for (const auto& p : skyline) {
-        cout << p.label << " - attr1: " << p.attr1 << ", attr2: " << p.attr2 << endl;
+        cout << p.label << " - attr1: " << p.attr1 
+             << ", attr2: " << p.attr2 << endl;
     }
 
+    // Statistik eksekusi
     cout << "\nJumlah produk dalam skyline: " << skyline.size() << endl;
     cout << "Waktu komputasi: " << durationMs.count() << " ms (" 
-    << durationUs.count() << " µs)" << endl;
+         << durationUs.count() << " µs)" << endl;
 
     return 0;
 }
-  ```
+
+```
   ### Penjelasan
 Struktur Data: Map (Dictionary)
 
@@ -1129,6 +1169,6 @@ Kompleksitas Waktu: O(n log n)
   ### Output
   ![Screenshot 2025-04-23 at 22 04 48](https://github.com/user-attachments/assets/5128c093-2ef3-40f6-a0b2-742991b99d9a)
 
-
+```
 <h2 id=7>Kesimpulan & analisis</h2>
 

@@ -23,11 +23,234 @@
   Penjelasan
   screensot
 #### Stack
+untuk mengimplementasikan skyline query dengan struktur data stack kita memerlukan library ini
+  ```cpp
+#include <iostream>   // Untuk input dan output standar seperti std::cout dan std::cin
+#include <fstream>    // Untuk operasi file seperti membaca dan menulis file
+#include <sstream>    // Untuk manipulasi string stream, seperti std::istringstream untuk parsing string
+#include <vector>     // Untuk penggunaan struktur data vektor (array dinamis)
+#include <stack>      // Untuk penggunaan struktur data stack (tumpukan)
+#include <chrono>     // Untuk pengukuran waktu, misalnya menghitung lama eksekusi program
   ```
-  kode
-  ```
-  Penjelasan
-  screensot
+lalu buat struck untuk menampung data data yang nanti akan kita compare 
+```cpp
+struct Produk {
+    int id;
+    string label;
+    float attr1;
+    float attr2;
+};
+```
+
+pada kasus kali ini kita membuat sebuah syarat dominasi yaitu: <br>
+attr1 = harga dan attr2 = review <br>
+jika kondisi 
+``` cpp
+bool mendominasi(const Produk& a, const Produk& b) {
+    return (a.attr1 <= b.attr1) && (a.attr2 >= b.attr2);
+}
+```
+maka produk a akan mendominasi produk b dan pastinya probuk b akan keluar dari list skyline query
+
+untuk menginput data dari file csv kita perlu sedikit ngoding seperti ini:
+
+```cpp
+vector<Produk> bacaCSV(const string& namaFile) {
+    vector<Produk> data;          // Vektor untuk menyimpan semua data produk yang dibaca dari file
+    ifstream file(namaFile);      // Membuka file CSV menggunakan input file stream
+    string baris;
+
+    getline(file, baris);         // Membaca baris pertama (header) dan melewatinya
+
+    while (getline(file, baris)) {       // Membaca setiap baris berikutnya dalam file
+        stringstream ss(baris);          // Mengubah baris menjadi stream untuk di-parse per kolom
+        string token;
+        Produk p;                        // Objek Produk sementara untuk menyimpan data satu baris
+
+        // Membaca token (data antar koma) satu per satu dan mengisi atribut Produk
+        getline(ss, token, ','); p.id = stoi(token);     // Mengambil dan mengonversi kolom pertama ke integer
+        getline(ss, token, ','); p.label = token;        // Mengambil kolom kedua sebagai string
+        getline(ss, token, ','); p.attr1 = stof(token);  // Mengambil kolom ketiga sebagai float
+        getline(ss, token, ','); p.attr2 = stof(token);  // Mengambil kolom keempat sebagai float
+
+        data.push_back(p);         // Menambahkan objek Produk ke dalam vektor data
+    }
+
+    return data;   // Mengembalikan semua data produk yang telah dibaca
+}
+```
+Fungsi bacaCSV bertugas membaca data dari sebuah file CSV, lalu mengubah setiap baris (kecuali header) menjadi objek bertipe Produk, dan mengembalikan semua objek itu dalam bentuk vector<Produk>.<br>
+
+```cpp
+vector<Produk> data;
+ifstream file(namaFile);
+```
+Membuat vektor kosong bernama data untuk menyimpan semua produk yang akan dibaca.
+Lalu membuka file dengan nama yang diberikan lewat parameter namaFile, menggunakan stream file input (ifstream).
+
+```cpp
+while (getline(file, baris)) {
+ stringstream ss(baris);
+string token;
+    Produk p;
+```
+Selama masih ada baris yang bisa dibaca dari file, lakukan proses parsing: Mengubah satu baris string menjadi objek stringstream agar bisa dipecah berdasarkan koma (,). token digunakan untuk menyimpan data antar koma, dan p adalah objek Produk sementara untuk setiap baris.
+
+```cpp
+getline(ss, token, ','); p.id = stoi(token);
+getline(ss, token, ','); p.label = token;
+getline(ss, token, ','); p.attr1 = stof(token);
+getline(ss, token, ','); p.attr2 = stof(token);
+```
+membaca kolom pertama, kedua, ketiga, dan ke empat dan di simpan di masing masing variabel nya.
+
+```cpp
+return data;
+```
+kembalikan semua data yang dibaca fungsi ini
+
+```cpp
+vector<Produk> skylineQuery(const vector<Produk>& produkList) {
+    stack<Produk> skyline;  // Stack untuk menyimpan kandidat produk yang masuk ke dalam hasil skyline
+
+    // Iterasi semua produk dalam list
+    for (const Produk& kandidat : produkList) {
+        bool didominasi = false;          // Penanda apakah kandidat didominasi oleh produk lain
+        stack<Produk> sementara;          // Stack sementara untuk menyimpan elemen yang sudah diproses
+
+        // Proses untuk membandingkan kandidat dengan elemen-elemen dalam stack skyline
+        while (!skyline.empty()) {
+            Produk top = skyline.top();   // Ambil produk paling atas dari stack
+            skyline.pop();                // Keluarkan produk tersebut dari stack
+
+            if (mendominasi(top, kandidat)) {
+                // Jika produk di stack mendominasi kandidat, maka kandidat tidak lolos skyline
+                didominasi = true;
+                sementara.push(top);      // Simpan kembali produk ini ke stack sementara
+                break;                    // Langsung hentikan pengecekan lebih lanjut
+            } else if (!mendominasi(kandidat, top)) {
+                // Jika kandidat tidak mendominasi produk di stack, simpan produk itu ke stack sementara
+                sementara.push(top);
+            }
+            // Catatan: Jika kandidat mendominasi top, maka top akan di-drop (tidak dikembalikan ke stack)
+        }
+
+        // Kembalikan semua elemen dari stack sementara ke stack utama
+        while (!sementara.empty()) {
+            skyline.push(sementara.top());
+            sementara.pop();
+        }
+
+        // Jika kandidat tidak didominasi oleh siapapun, masukkan ke dalam skyline
+        if (!didominasi) {
+            skyline.push(kandidat);
+        }
+    }
+
+    // Pindahkan isi stack skyline ke dalam vektor hasil
+    vector<Produk> hasil;
+    while (!skyline.empty()) {
+        hasil.push_back(skyline.top());
+        skyline.pop();
+    }
+
+    return hasil;  // Kembalikan hasil akhir produk yang termasuk dalam skyline
+}
+
+```
+Fungsi skylineQuery digunakan untuk menentukan produk-produk unggulan (skyline) dari daftar produkList, berdasarkan kriteria dominasi. Produk yang tidak didominasi oleh produk lain akan dimasukkan ke dalam hasil.<br>
+Konsep Dominasi : <br>
+Produk A mendominasi produk B jika:
+<br>
+A.attr1 < B.attr1 dan
+<br>
+A.attr1 > B.attr2
+<br>
+Artinya, A lebih baik dalam dua arah: attr1 lebih kecil dari B (harga), tapi juga lebih besar dari attr2 B (review).
+```cpp
+for (const Produk& kandidat : produkList) {
+bool didominasi = false;
+stack<Produk> sementara;
+```
+Fungsi akan mengecek setiap kandidat apakah layak masuk ke dalam skyline.
+<li>
+  didominasi akan jadi true jika kandidat terbukti dikalahkan oleh produk yang sudah ada.
+</li>
+<li>
+  Stack sementara dipakai untuk menyimpan produk yang diambil sementara dari skyline saat pengecekan.
+</li>
+
+```cpp
+while (!skyline.empty()) {
+    Produk top = skyline.top();
+    skyline.pop();
+if (mendominasi(top, kandidat)) {
+    didominasi = true;
+    sementara.push(top);
+    break;
+}
+else if (!mendominasi(kandidat, top)) {
+    sementara.push(top);
+}
+```
+Bandingkan dengan Stack Skyline <br>
+<li>Ambil satu per satu produk dari skyline untuk dibandingkan dengan kandidat.</li>
+<li>Kalau produk yang sudah ada (top) mendominasi kandidat, maka kandidat tidak dimasukkan.</li>
+<li>Kalau kandidat tidak mendominasi produk yang sudah ada, maka produk itu tetap disimpan.</li>
+<li>Jika kandidat mendominasi top, maka top dibuang dari skyline.</li>
+<br>
+Kembalikan Stack Sementara
+
+```cpp
+while (!sementara.empty()) {
+    skyline.push(sementara.top());
+    sementara.pop();
+}
+```
+
+Kalau kandidat aman dari dominasi, ia masuk ke skyline. (push)
+
+```cpp
+if (!didominasi) {
+    skyline.push(kandidat);
+}
+```
+
+Isi stack dipindahkan ke vector agar hasil bisa dikembalikan dalam bentuk yang lebih fleksibel. **(yang udah di pindahkan ini hasil yang nggk terdominasi alias list fiks dari skyline query)**.
+```cpp
+vector<Produk> hasil;
+while (!skyline.empty()) {
+    hasil.push_back(skyline.top());
+    skyline.pop();
+}
+```
+<br>
+untuk dokumentasi atau penyimpanan data hasil tadi alangkah baiknya kita simpan di file word, begini kode nya
+
+```cpp
+void simpanHasilSkylineCSV(const vector<Produk>& hasil, const string& namaFile) {
+    ofstream file(namaFile);  // Membuka file output untuk ditulis (akan menimpa jika sudah ada)
+
+    file << "id,label,attr_1,attr_2\n";  // Menuliskan baris header ke file CSV
+
+    // Menuliskan setiap data produk hasil skyline ke dalam file
+    for (const Produk& p : hasil) {
+        file << p.id << ","              // Menulis ID produk
+             << p.label << ","           // Menulis label produk
+             << p.attr1 << ","           // Menulis nilai atribut 1
+             << p.attr2 << "\n";         // Menulis nilai atribut 2 diikuti newline
+    }
+
+    file.close();  // Menutup file setelah selesai menulis
+}
+```
+
+penjelasan singkat <br>
+<li>Fungsi ini menyimpan data hasil dari skyline query ke dalam file .csv.</li>
+<li>Format output tetap konsisten: kolom dipisahkan koma (CSV).</li>
+<li>Header ditulis terlebih dahulu, lalu setiap baris data ditulis sesuai isi vector<Produk>.</li>
+
+
 #### Queue
   ```
   kode

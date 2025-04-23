@@ -8,3 +8,12 @@
 | Ahmad Idza Anaafin | 5027241017 | HASH TABLE |
 | Muhammad Fatihul Qolbi Ash Shiddiqi | 5027241023 | LINKED LIST |
 | Danar Bagus Rasendriya | 5027231055 | MAP |
+
+
+## Array
+## Linked List
+##Stack
+## Queue
+## Hash Table
+## Map
+## Analisis

@@ -173,6 +173,10 @@ Kelebihan penggunaan vector:
 
 Metode ini cocok untuk menangani dataset seperti CSV karena memungkinkan penyimpanan data dalam jumlah besar secara fleksibel dan efisien.
 
+### Output 
+![WhatsApp Image 2025-04-23 at 21 52 58_b86138e5](https://github.com/user-attachments/assets/80845646-77bb-405c-89f2-96d30a37d11e)
+
+
  
 
 <h2 id= 2>Linked List</h2>

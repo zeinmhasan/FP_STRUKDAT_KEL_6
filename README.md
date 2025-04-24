@@ -1009,109 +1009,56 @@ int main() {
 #include <map>
 #include <chrono>
 #include <algorithm>
-#include <iomanip>
-#include <string>
 
 using namespace std;
 using namespace std::chrono;
 
-/**
- * Struct untuk merepresentasikan produk dengan:
- * - id: identifier unik
- * - label: nama produk
- * - attr1: atribut pertama (misal: harga)
- * - attr2: atribut kedua (misal: rating)
- */
-struct Product {
-    int id;
-    string label;
-    int attr1;
-    int attr2;
-};
-
-/**
- * Membaca data dari file CSV dan mengkonversinya ke vector<Product>
- * @param filename Nama file CSV
- * @return Vector berisi semua produk yang berhasil dibaca
- */
-vector<Product> readCSV(const string& filename) {
-    vector<Product> data;
+// Membaca file CSV dan parsing jadi vector pasangan (harga, rating)
+vector<pair<int, int>> readCSV(const string& filename) {
+    vector<pair<int, int>> data;
     ifstream file(filename);
-
-    // Error handling jika file tidak bisa dibuka
-    if (!file.is_open()) {
-        cerr << "❌ File tidak ditemukan: " << filename << endl;
-        return data;
-    }
-
     string line;
-    getline(file, line); // skip header (baris pertama)
-
-    // Membaca setiap baris data
+    
     while (getline(file, line)) {
         stringstream ss(line);
-        string id_str, label, attr1_str, attr2_str;
-        
-        // Parsing setiap kolom
-        getline(ss, id_str, ',');
-        getline(ss, label, ',');
-        getline(ss, attr1_str, ',');
-        getline(ss, attr2_str, ',');
+        string x_str, y_str;
+        getline(ss, x_str, ',');
+        getline(ss, y_str, ',');
 
-        try {
-            // Konversi string ke integer
-            int id = stoi(id_str);
-            int attr1 = stoi(attr1_str);
-            int attr2 = stoi(attr2_str);
-            
-            // Tambahkan ke vector data
-            data.push_back({id, label, attr1, attr2});
-        } catch (...) {
-            // Skip baris jika terjadi error konversi
-            continue;
-        }
+        int x = stoi(x_str);
+        int y = stoi(y_str);
+        data.emplace_back(x, y);
     }
 
     return data;
 }
 
-/**
- * Algoritma Skyline menggunakan struktur data map
- * @param products Vector produk input
- * @return Vector produk yang merupakan skyline
- */
-vector<Product> skylineUsingMap(const vector<Product>& products) {
-    // 1. Urutkan produk berdasarkan attr1 (ascending)
-    vector<Product> sorted = products;
-    sort(sorted.begin(), sorted.end(), [](const Product& a, const Product& b) {
-        return a.attr1 < b.attr1;
-    });
+// Fungsi skyline query dengan struktur data map
+vector<pair<int, int>> skylineQueryMap(const vector<pair<int, int>>& products) {
+    vector<pair<int, int>> sortedProducts = products;
+    sort(sortedProducts.begin(), sortedProducts.end()); // urutkan berdasarkan harga naik
 
-    // 2. Inisialisasi map untuk menyimpan skyline
-    // Key: attr1 (harga), Value: Product
-    map<int, Product> skyline;
+    map<int, int> skyline; // key = harga, value = rating
 
-    // 3. Proses setiap produk secara berurutan
-    for (const auto& p : sorted) {
-        bool dominated = false;
-        
-        // 3a. Cek apakah produk didominasi oleh skyline yang ada
-        for (const auto& [_, q] : skyline) {
-            if (q.attr1 <= p.attr1 && q.attr2 >= p.attr2) {
-                dominated = true;
+    for (const auto& [price, rating] : sortedProducts) {
+        auto it = skyline.lower_bound(price);
+
+        bool isDominated = false;
+        for (auto& [p, r] : skyline) {
+            if (p <= price && r >= rating) {
+                isDominated = true;
                 break;
             }
         }
 
-        // 3b. Jika tidak didominasi, tambahkan ke skyline
-        if (!dominated) {
-            skyline[p.attr1] = p;
+        if (!isDominated) {
+            skyline[price] = rating;
 
-            // 3c. Hapus produk di skyline yang didominasi oleh produk baru ini
-            auto it = skyline.upper_bound(p.attr1);
+            // Hapus titik yang didominasi oleh titik baru
+            auto it = skyline.upper_bound(price);
             while (it != skyline.end()) {
-                if (it->second.attr2 <= p.attr2) {
-                    it = skyline.erase(it); // Hapus yang didominasi
+                if (it->second <= rating) {
+                    it = skyline.erase(it);
                 } else {
                     ++it;
                 }
@@ -1119,44 +1066,27 @@ vector<Product> skylineUsingMap(const vector<Product>& products) {
         }
     }
 
-    // 4. Konversi map ke vector untuk return value
-    vector<Product> result;
-    for (const auto& [_, p] : skyline) {
-        result.push_back(p);
-    }
-
+    // Ubah hasil ke vector
+    vector<pair<int, int>> result(skyline.begin(), skyline.end());
     return result;
 }
 
 int main() {
-    // Konfigurasi file input
     string filename = "ind_1000_2_product.csv";
-    
-    // Baca data dari file
-    vector<Product> data = readCSV(filename);
-    cout << "Jumlah produk dalam data: " << data.size() << endl;
+    auto data = readCSV(filename);
 
-    // Eksekusi skyline query + ukur waktu
     auto start = high_resolution_clock::now();
-    vector<Product> skyline = skylineUsingMap(data);
+    auto skyline = skylineQueryMap(data);
     auto end = high_resolution_clock::now();
-    
-    // Hitung durasi
-    auto durationMs = duration_cast<milliseconds>(end - start);
-    auto durationUs = duration_cast<microseconds>(end - start);
 
-    // Tampilkan hasil
-    cout << "\nHasil Skyline:\n";
-    for (const auto& p : skyline) {
-        cout << p.label << " - attr1: " << p.attr1 
-             << ", attr2: " << p.attr2 << endl;
+    duration<double> diff = end - start;
+
+    cout << "Skyline results (" << skyline.size() << " points):\n";
+    for (auto& [price, rating] : skyline) {
+        cout << "(" << price << ", " << rating << ")\n";
     }
 
-    // Statistik eksekusi
-    cout << "\nJumlah produk dalam skyline: " << skyline.size() << endl;
-    cout << "Waktu komputasi: " << durationMs.count() << " ms (" 
-         << durationUs.count() << " µs)" << endl;
-
+    cout << "\nExecution time: " << diff.count() << " seconds\n";
     return 0;
 }
 ```
